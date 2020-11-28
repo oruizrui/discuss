@@ -5,15 +5,28 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
+
+random_secret = :crypto.strong_rand_bytes(64) |> Base.encode64() |> binary_part(0, 64)
+
+# Configures the endpoint
+secret_key_base = System.get_env("SECRET_KEY_BASE", random_secret)
 
 config :discuss,
   ecto_repos: [Discuss.Repo]
 
+config :notifier, Discuss.Repo,
+  username: System.get_env("POSTGRES_USERNAME", "postgres"),
+  password: System.get_env("POSTGRES_PASSWORD", "postgres"),
+  database: System.get_env("POSTGRES_DATABASE_NAME", "discuss"),
+  hostname: System.get_env("POSTGRES_HOSTNAME", "localhost"),
+  port: String.to_integer(System.get_env("POSTGRES_PORT", "5432")),
+  pool: Ecto.Adapters.SQL.Sandbox
+
 # Configures the endpoint
 config :discuss, DiscussWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "AcEFGRHmwAM05tpQmWS0cSykJzWTkAcTEy3Q4TvzD0x21oG3KwoL09qn/YxSIq+L",
+  secret_key_base: secret_key_base,
   render_errors: [view: DiscussWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Discuss.PubSub,
   live_view: [signing_salt: "uxMCmxoH"]

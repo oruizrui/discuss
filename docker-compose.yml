@@ -1,0 +1,38 @@
+version: '3.7'
+
+volumes:
+  node_modules:
+  build:
+  db-data:
+
+services:
+  postgres:
+    image: postgres:13.0-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: discuss
+
+  discuss:
+    build:
+      context: .
+      target: ${BUILD_TARGET:-default}
+    volumes:
+      - .:/opt/app
+      - node_modules:/opt/app/assets/node_modules
+      - build:/opt/app/_build
+    ports:
+      - 4000:4000
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DATABASE_NAME: discuss
+      POSTGRES_HOSTNAME: postgres
+      POSTGRES_PORT: 5432
+      SECRET_KEY_BASE: nWMOs9iePlLdCTv3JWwMrfNeS0QgmyYE0EbOHMBhz3CnjPp37xnkmDDDU/yzA/UJ
+    depends_on:
+      - postgres
