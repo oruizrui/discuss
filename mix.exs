@@ -1,16 +1,19 @@
 defmodule Discuss.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
-      app: :discuss,
-      version: "0.1.0",
-      elixir: "~> 1.11.2",
-      elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
-      start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      app: :discuss,
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      deps: deps(),
+      dialyzer: dialyzer(),
+      elixir: "~> 1.11",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      start_permanent: Mix.env() == :prod,
+      version: @version
     ]
   end
 
@@ -33,18 +36,23 @@ defmodule Discuss.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.7"},
-      {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
-      {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.4"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:phoenix, "~> 1.5.5"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:phoenix_html, "~> 2.11"},
+      {:phoenix_live_dashboard, "~> 0.2"},
+      {:plug_cowboy, "~> 2.0"},
+      {:postgrex, ">= 0.0.0"},
+      {:telemetry_metrics, "~> 0.4"},
+      {:telemetry_poller, "~> 0.4"},
+      # dev / test
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.13", only: [:test]},
+      # dev
+      {:phoenix_live_reload, "~> 1.2", only: :dev}
     ]
   end
 
@@ -60,6 +68,12 @@ defmodule Discuss.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+    ]
+  end
+
+  defp dialyzer do
+    [
+      plt_file: {:no_warn, "_build/plts/dialyzer.plt"}
     ]
   end
 end
