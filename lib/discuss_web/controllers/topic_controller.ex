@@ -1,22 +1,19 @@
 defmodule DiscussWeb.TopicController do
-    use DiscussWeb, :controller
+  use DiscussWeb, :controller
 
-    import Ecto.Query
+  alias Discuss.Topic
 
-    alias Discuss.Topic
+  def new(conn, _params) do
+    changeset = Topic.changeset(%Topic{} , %{})
+    render conn, "new.html", changeset: changeset
+  end
 
-    def new(conn, _params) do
-        changeset = Topic.changeset(%Topic{} , %{}) 
+  def create(con, %{"topic" => topic}) do
+    changeset = Topic.changeset(%Topic{} , topic)
 
-        render conn, "new.html", changeset: changeset
+    case Repo.insert(changeset) do
+      {:ok, post} -> IO.inspect(post)
+      {:error, changeset} -> IO.inspect(changeset)
     end
-
-    def create(con, %{"topic" => topic}) do
-        changeset = Topic.changeset(%Topic{} , topic) 
-
-        case Repo.insert(changeset) do
-            {:ok, post} -> IO.inspect(post)
-            {:error, changeset} -> IO.inspect(changeset)
-        end
-    end
+  end
 end
