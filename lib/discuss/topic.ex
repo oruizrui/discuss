@@ -5,7 +5,7 @@ defmodule Discuss.Topic do
   schema "topics" do
     field :title, :string
 
-    timestamps([type: :utc_datetime_usec])
+    timestamps(type: :utc_datetime_usec)
   end
 
   @doc false

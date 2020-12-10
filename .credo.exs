@@ -9,7 +9,6 @@
       },
       checks: [
         {Credo.Check.Consistency.TabsOrSpaces},
-
         {Credo.Check.Readability.MaxLineLength, [max_length: 120]},
 
         #
@@ -28,4 +27,3 @@
     }
   ]
 }
-
