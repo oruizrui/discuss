@@ -17,7 +17,7 @@
             <li class="list-group-item">
               <%= topic.title %>
               <div class="col-6">
-                <%= link to: Routes.topic_path(@conn, :edit), class: "fake" do %>
+                <%= link to: Routes.topic_path(@conn, :edit, topic.id), class: "fake" do %>
                   edit topic
                 <% end %>
               </div>
