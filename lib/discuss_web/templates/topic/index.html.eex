@@ -5,7 +5,7 @@
       <h2>Topics</h2>
     </div>
     <div class="col-6">
-      <%= link to: Routes.topic_path(@conn, :new), class: "fake" do %>
+      <%= link to: Routes.topic_path(@conn, :new) do %>
         Add new Topic
       <% end %>
     </div>
@@ -17,8 +17,13 @@
             <li class="list-group-item">
               <%= topic.title %>
               <div class="col-6">
-                <%= link to: Routes.topic_path(@conn, :edit, topic.id), class: "fake" do %>
-                  edit topic
+                <%= link to: Routes.topic_path(@conn, :edit, topic.id) do %>
+                  edit
+                <% end %>
+              </div>
+              <div class="col-6">
+                <%= link to: Routes.topic_path(@conn, :delete, topic.id), method: :delete do %>
+                  delete
                 <% end %>
               </div>
             </li>
